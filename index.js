@@ -37,7 +37,7 @@ function messageAttachmentFromLink(link) {
 	var res = request('GET',apilink.toString());
 	var body = res.getBody('utf8');
 	body = body.replace(")]}\'","");
-	
+
 	var attachment = {
 		title: link.url,
 		url: link.url,
@@ -58,6 +58,7 @@ function messageAttachmentFromLink(link) {
 		attachment = {
 			title: result.subject,
 			url: link.url,
+			title_link: link.url,
 			text: "Project: " + result.project + " (" + result.branch + ")",
 			color: colorn,
 			footer: result.status
