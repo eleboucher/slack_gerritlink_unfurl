@@ -44,9 +44,12 @@ function messageAttachmentFromLink(link) {
 		color: "#36a64f",
 	};
 
+
 	if (query === 0){
 		var result = JSON.parse(body);
-
+		var userlink = link.url.toString().replace('#/c/', 'accounts/' + result['owner']["_account_id"] + "/name/");
+		var user = request('GET', userlink);
+		var username = user.getBody('utf8').replace(")]}\'","").replace(/\n/g,'').replace(/\"/g,'');
 		if (result.status === "NEW") {
 			var colorn = "#439FE0";
 		} else if (result.status === "MERGED") {
@@ -61,12 +64,12 @@ function messageAttachmentFromLink(link) {
 			title_link: link.url,
 			text: "Project: " + result.project + " (" + result.branch + ")",
 			color: colorn,
-			footer: result.status
+			footer: "Status: " + result.status + " \tOwner: " + username
 		};
 	}
+
 	console.log(attachment);
 	return attachment;
-
 };
 
 
@@ -75,11 +78,11 @@ slackEvents.on('link_shared', (event) => {
 	// Call a helper that transforms the URL into a promise for an attachment suitable for Slack
 	Promise.all(event.links.map(messageAttachmentFromLink))
 	// Transform the array of attachments to an unfurls object keyed by URL
-	.then(attachments => keyBy(attachments, 'url'))
-	.then(unfurls => mapValues(unfurls, attachment => omit(attachment, 'url')))
+		.then(attachments => keyBy(attachments, 'url'))
+		.then(unfurls => mapValues(unfurls, attachment => omit(attachment, 'url')))
 	// Invoke the Slack Web API to append the attachment
-	.then(unfurls => slack.chat.unfurl(event.message_ts, event.channel, unfurls))
-	.catch(console.error);
+		.then(unfurls => slack.chat.unfurl(event.message_ts, event.channel, unfurls))
+		.catch(console.error);
 });
 
 
