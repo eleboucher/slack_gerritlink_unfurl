@@ -47,7 +47,7 @@ function messageAttachmentFromLink(link) {
 
 	if (query === 0){
 		var result = JSON.parse(body);
-		var userlink = link.url.toString().replace('#/c/', 'accounts/' + result['owner']["_account_id"] + "/name/");
+		var userlink = apilink.toString().replace('changes/', 'accounts/' + result['owner']["_account_id"] + "/name/");
 		var user = request('GET', userlink);
 		var username = user.getBody('utf8').replace(")]}\'","").replace(/\n/g,'').replace(/\"/g,'');
 		if (result.status === "NEW") {
