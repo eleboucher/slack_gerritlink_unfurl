@@ -19,16 +19,16 @@ function messageAttachmentFromLink(link) {
   var apilink = link.url
   var regex1 = new RegExp('.[a-z]*/[0-9]*$|.[a-z]*/[0-9]*/$')
   var regex2 = new RegExp('/c/')
-  console.log({ apilink })
+
   if (regex2.test(apilink.toString())) {
-    apilink = apilink.toString().replace('/c/', 'changes/')
+    apilink = apilink.toString().replace('#/c/', 'changes/')
   } else if (regex1.test(apilink.toString())) {
     var regex3 = new RegExp('/$')
     if (regex3.test(apilink.toString())) {
       apilink = apilink.toString().replace('/$', '')
     }
     var lastIndex = apilink.toString().lastIndexOf('/')
-    apilink = apilink.toString().substr(0, lastIndex) + '/changes' + apilink.toString().substr(lastIndex)
+    apilink = apilink.toString().substr(0, lastIndex) + '/changes/' + apilink.toString().substr(lastIndex)
   } else {
     query = 1
   }
